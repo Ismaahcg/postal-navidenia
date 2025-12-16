@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>El bául de los recuerdos</title>
+  <style>
+    body {
+      background: url('../assets/fondo.png') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 0;
+      font-family: "Cinzel", serif;
+      color: #f0e6d2;
+      overflow: hidden;
+    }
+
+    #monolito {
+      width: 1200px;
+      height: 1000px;
+      margin: 60px auto;
+      position: relative;
+      padding-top: 20px;
+    }
+
+    .runa {
+      width: 140px;
+      height: 140px;
+      position: absolute;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+    }
+
+    .runa[data-id="1"] { top:60px; left:100px; }
+    .runa[data-id="2"] { top:60px; left:500px; }
+    .runa[data-id="3"] { top:60px; left:900px; }
+    .runa[data-id="4"] { top:360px; left:100px; }
+    .runa[data-id="5"] { top:360px; left:500px; }
+    .runa[data-id="6"] { top:360px; left:900px; }
+    .runa[data-id="7"] { top:660px; left:100px; }
+    .runa[data-id="8"] { top:660px; left:500px; }
+    .runa[data-id="9"] { top:660px; left:900px; }
+
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #runa-ampliada {
+      text-align: center;
+      position: relative;
+      animation: aparecer 0.3s ease;
+    }
+
+    #runa-central {
+      width: 220px;
+      height: 220px;
+      animation: girar 0.6s ease;
+    }
+
+    #texto {
+      margin-top: 20px;
+      font-size: 18px;
+      line-height: 1.6;
+      white-space: pre-line;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #cerrar {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ffcc66;
+      background: #331;
+      border: 1px solid #ffcc66;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+    }
+
+    #overlay-instrucciones {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* por encima de todo */
+    }
+
+    #caja-instrucciones {
+      width: 600px;
+      max-width: 90vw;
+      background: rgba(10, 10, 10, 0.95);
+      border: 1px solid #ffcc66;
+      box-shadow: 0 0 30px rgba(0,0,0,0.9);
+      padding: 25px 30px 20px;
+      position: relative;
+      text-align: left;
+    }
+
+    #caja-instrucciones h1 {
+      margin-top: 0;
+      font-size: 26px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    #caja-instrucciones p {
+      font-size: 16px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+
+    #caja-instrucciones ul {
+      margin: 10px 0 15px 20px;
+      padding: 0;
+    }
+
+    #caja-instrucciones li {
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    #cerrar-instrucciones {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #ffcc66;
+      background: #331;
+      border: 1px solid #ffcc66;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+    }
+
+    #btn-empezar {
+      display: block;
+      margin: 10px auto 0;
+      padding: 8px 16px;
+      background: #ffcc66;
+      color: #1a1208;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    #btn-empezar:hover {
+      background: #ffe08c;
+    }
+
+    @keyframes girar {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    @keyframes aparecer {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="monolito">
+  <img src="../assets/runa1.png" class="runa" data-id="1" alt="HÁLDRA">
+  <img src="../assets/runa2.png" class="runa" data-id="2" alt="FJORDEN">
+  <img src="../assets/runa3.png" class="runa" data-id="3" alt="ÞRAKK">
+  <img src="../assets/runa4.png" class="runa" data-id="4" alt="ÁSGAR">
+  <img src="../assets/runa5.png" class="runa" data-id="5" alt="RÚNVALD">
+  <img src="../assets/runa6.png" class="runa" data-id="6" alt="KARGR">
+  <img src="../assets/runa7.png" class="runa" data-id="7" alt="NORDHIM">
+  <img src="../assets/runa8.png" class="runa" data-id="8" alt="JÖTUNN">
+  <img src="../assets/runa9.png" class="runa" data-id="9" alt="ÓRMR">
+</div>
+
+<div id="overlay" class="hidden">
+  <div id="runa-ampliada">
+    <img id="runa-central" src="" alt="Runa ampliada">
+    <div id="texto"></div>
+    <button id="cerrar">✕</button>
+  </div>
+</div>
+
+<div id="overlay-instrucciones">
+  <div id="caja-instrucciones">
+    <button id="cerrar-instrucciones">✕</button>
+    <h1>El bául de los recuerdos de Tetsugoro</h1>
+    <p>
+      Ante ti se alzan las nueve runas que guardan la memoria rota de Tetsugoro.
+    </p>
+    <p><strong>Cómo usar esta piedra:</strong></p>
+    <ul>
+      <li>Haz clic sobre cualquier runa para invocar su recuerdo.</li>
+      <li>La runa se mostrará en el centro, junto a su fragmento de historia.</li>
+      <li>Usa la ✕ para cerrar el recuerdo y volver a la piedra.</li>
+    </ul>
+    <p>
+      Algunas runas son cálidas, otras pesan como una culpa antigua, solo tómate tu tiempo.
+    </p>
+    <button id="btn-empezar">Comenzar</button>
+  </div>
+</div>
+
+<script>
+  const textos = {
+    1: `HÁLDRA — Runa de la Madre\n\nRecuerdo cálido de su voz y sus manos gigantes antes de ser secuestrada a manos de piratas. No solo la secuestraron a ella,
+     sino a otros gigantes más para ser subastados como esclavos. `,
+    2: `FJORDEN — Runa del Hogar\n\nEl fuego, la madera, el olor a resina en Elbaf antes de la tragedia. Aquella noche será inolvidable para Tetsugoro, secuelas, visiones, pesadillas.. `,
+    3: `ÞRAKK — Runa del Secuestro\n\nLa madre gigante de Tetsugoro es arrancada de su hogar por piratas en una noche que marcó su juventud para siempre. 
+    Un recuerdo que aún arde como una herida abierta. `,
+    4: `ÁSGAR — Runa del Juramento\n\nAnte sí mismo, en silencio solemne, Tetsugoro juró no volver a caer en la debilidad. 
+    Prometió proteger a los suyos, su tripulación, con la fuerza que no pudo usar cuando más la necesitaba. `,
+    5: `RÚNVALD — Runa del Padre Caído\n\nSu padre murió intentando rescatar a la madre de Tetsugoro. Sus palabras siguen guiándolo: 
+    “El día que levantes tu brazo por alguien más, que no sea por orgullo: hazlo porque el corazón lo pidió.”\n“La fuerza sin propósito solo pesa.” `,
+    6: `KARGR — Runa de la Culpa\n\nTetsugoro carga con la culpa de no haber protegido a sus padres. Una herida que él cree merecida, la más pesada de todas, la que nunca termina de sanar. `,
+    7: `NORDHIM — Runa del Exilio\n\nCon esperanza ingenua, Tetsugoro esperó en el puerto de Elbaf la llegada de otro barco pirata esclavista, 
+    soñando con rescatar a su madre y volver a vivir junto a ella. `,
+    8: `JÖTUNN — Runa del Gigante\n\nTetsugoro se une a la tripulación Mugetsu-dan, siendo el único gigante entre ellos. 
+    Un nuevo camino, un mar desconocido, y aventuras que lo alejan de su pasado sin borrarlo. `,
+    9: `ÓRMR — Runa Rota\n\nNo es un recuerdo, sino lo que aún no ha sido escrito. La runa del destino: el futuro incierto, el misterio que Tetsugoro forja con cada una de sus decisiones. `
+  };
+
+  const overlay = document.getElementById('overlay');
+  const runaCentral = document.getElementById('runa-central');
+  const textoDiv = document.getElementById('texto');
+  const btnCerrar = document.getElementById('cerrar');
+
+  const overlayInstrucciones = document.getElementById('overlay-instrucciones');
+  const btnCerrarInstrucciones = document.getElementById('cerrar-instrucciones');
+  const btnEmpezar = document.getElementById('btn-empezar');
+
+  // Cerrar instrucciones (✕ y "Comenzar")
+  const cerrarInstrucciones = () => {
+    // Puedes usar clase o estilo directo; como ya tienes .hidden, usamos esa:
+    overlayInstrucciones.classList.add('hidden');
+  };
+
+  btnCerrarInstrucciones.addEventListener('click', cerrarInstrucciones);
+  btnEmpezar.addEventListener('click', cerrarInstrucciones);
+
+  // Click en runa → muestra overlay de runa
+  document.querySelectorAll('.runa').forEach(runa => {
+    runa.addEventListener('click', () => {
+      const id = runa.getAttribute('data-id');
+      const src = runa.getAttribute('src');
+      runaCentral.src = src;
+      textoDiv.textContent = textos[id] || '';
+      overlay.classList.remove('hidden');
+    });
+  });
+
+  // Cerrar runa ampliada
+  btnCerrar.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+    runaCentral.src = '';
+  });
+</script>
+
+</body>
+</html>

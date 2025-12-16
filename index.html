@@ -1,279 +1,274 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>El bául de los recuerdos</title>
+  <meta charset="UTF-8" />
+  <title>Postal Navideña</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    body {
-      background: url('../assets/fondo.png') no-repeat center center fixed;
-      background-size: cover;
+    :root {
+      --red: #b11226;
+      --green: #0f5132;
+      --gold: #f5c97a;
+      --sky1: #0b132b;
+      --sky2: #1c2541;
+      --snow: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: "Cinzel", serif;
-      color: #f0e6d2;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--sky2), var(--sky1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* ====== POSTAL ====== */
+    .card {
+      width: 360px;
+      height: 520px;
+      perspective: 1200px;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      backface-visibility: hidden;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,.5);
+    }
+
+    /* ====== FRENTE ====== */
+    .front {
+      background: linear-gradient(to bottom, #0f5132, #083b25);
+    }
+
+    .moon {
+      position: absolute;
+      top: 100px;
+      right: 40px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      /*background: #fff;*/
+      background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+      box-shadow: 0 0 25px rgba(255,255,255,0.6);
       overflow: hidden;
     }
 
-    #monolito {
-      width: 1200px;
-      height: 1000px;
-      margin: 60px auto;
-      position: relative;
-      padding-top: 20px;
+    .moon::before, .moon::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.08);
     }
 
-    .runa {
-      width: 140px;
-      height: 140px;
+    .moon::before {
+      width: 10px;
+      height: 10px;
+      top: 18px;
+      left: 22px;
+    }
+
+    .moon::after {
+      width: 6px;
+      height: 6px;
+      top: 38px;
+      left: 40px;
+    }
+
+    .tree {
       position: absolute;
-      cursor: pointer;
-      transition: transform 0.5s ease;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 90px solid transparent;
+      border-right: 90px solid transparent;
+      border-bottom: 200px solid var(--green);
     }
 
-    .runa[data-id="1"] { top:60px; left:100px; }
-    .runa[data-id="2"] { top:60px; left:500px; }
-    .runa[data-id="3"] { top:60px; left:900px; }
-    .runa[data-id="4"] { top:360px; left:100px; }
-    .runa[data-id="5"] { top:360px; left:500px; }
-    .runa[data-id="6"] { top:360px; left:900px; }
-    .runa[data-id="7"] { top:660px; left:100px; }
-    .runa[data-id="8"] { top:660px; left:500px; }
-    .runa[data-id="9"] { top:660px; left:900px; }
-
-    #overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(10,10,10,0.75);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
+  .tree::before, .tree::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 70px solid transparent;
+      border-right: 70px solid transparent;
+      border-bottom: 160px solid #136f43;
     }
 
-    .hidden {
-      display: none !important;
+    .tree::before {
+      top: 40px;
     }
 
-    #runa-ampliada {
+    .tree::after {
+      top: 80px;
+    }
+
+    .star {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 26px;
+      height: 26px;
+      background: var(--gold);
+      box-shadow: 0 0 20px var(--gold);
+      animation: twinkle 1.5s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { transform: translateX(-50%) rotate(45deg) scale(1); }
+      to { transform: translateX(-50%) rotate(45deg) scale(1.3); }
+    }
+
+    .greeting {
+      position: absolute;
+      top: 40px;
+      width: 100%;
       text-align: center;
-      position: relative;
-      animation: aparecer 0.3s ease;
-    }
-
-    #runa-central {
-      width: 220px;
-      height: 220px;
-      animation: girar 0.6s ease;
-    }
-
-    #texto {
-      margin-top: 20px;
-      font-size: 18px;
-      line-height: 1.6;
-      white-space: pre-line;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    #cerrar {
-      position: absolute;
-      top: -10px;
-      right: -10px;
-      font-size: 20px;
-      cursor: pointer;
-      color: #ffcc66;
-      background: #331;
-      border: 1px solid #ffcc66;
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-    }
-
-    #overlay-instrucciones {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000; /* por encima de todo */
-    }
-
-    #caja-instrucciones {
-      width: 600px;
-      max-width: 90vw;
-      background: rgba(10, 10, 10, 0.95);
-      border: 1px solid #ffcc66;
-      box-shadow: 0 0 30px rgba(0,0,0,0.9);
-      padding: 25px 30px 20px;
-      position: relative;
-      text-align: left;
-    }
-
-    #caja-instrucciones h1 {
-      margin-top: 0;
-      font-size: 26px;
+      font-size: 2.2rem;
+      font-weight: 700;
       letter-spacing: 2px;
-      text-transform: uppercase;
-      text-align: center;
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(0,0,0,.6);
     }
 
-    #caja-instrucciones p {
-      font-size: 16px;
+    /* ====== ATRÁS ====== */
+    .back {
+      background: linear-gradient(135deg, #b11226, #7a0c1b);
+      transform: rotateY(180deg);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .message {
+      background: rgba(255,255,255,.1);
+      border-radius: 16px;
+      padding: 24px;
       line-height: 1.6;
-      margin-bottom: 12px;
+      font-size: 1.05rem;
+      backdrop-filter: blur(4px);
     }
 
-    #caja-instrucciones ul {
-      margin: 10px 0 15px 20px;
-      padding: 0;
+    .signature {
+      text-align: right;
+      font-style: italic;
+      color: var(--gold);
     }
 
-    #caja-instrucciones li {
-      font-size: 15px;
-      margin-bottom: 6px;
+    .btn-navidad {
+      display: inline-block;
+      padding: 8px 30px;
+      background: linear-gradient(135deg, #b30000, #ff4d4d);
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 12px;
+      border: 3px solid #fff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 0, 0, 0.4);
+      transition: 0.3s;
+      font-family: 'Cinzel', serif;
     }
 
-    #cerrar-instrucciones {
-      position: absolute;
+    .btn-navidad:hover {
+      background: linear-gradient(135deg, #ff6666, #ff1a1a);
+      transform: scale(1.05);
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 0, 0, 0.6);
+    }
+
+    .btn-navidad:active {
+      transform: scale(0.97);
+    }
+
+    /* ====== NIEVE ====== */
+    .snowflake {
+      position: fixed;
       top: -10px;
-      right: -10px;
-      font-size: 20px;
-      cursor: pointer;
-      color: #ffcc66;
-      background: #331;
-      border: 1px solid #ffcc66;
+      background: var(--snow);
       border-radius: 50%;
-      width: 32px;
-      height: 32px;
+      opacity: .8;
+      animation: fall linear infinite;
     }
 
-    #btn-empezar {
-      display: block;
-      margin: 10px auto 0;
-      padding: 8px 16px;
-      background: #ffcc66;
-      color: #1a1208;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 15px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    #btn-empezar:hover {
-      background: #ffe08c;
-    }
-
-    @keyframes girar {
-      from { transform: rotateY(0deg); }
-      to { transform: rotateY(360deg); }
-    }
-
-    @keyframes aparecer {
-      from { opacity: 0; transform: scale(0.85); }
-      to { opacity: 1; transform: scale(1); }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+      }
     }
   </style>
 </head>
 <body>
 
-<div id="monolito">
-  <img src="../assets/runa1.png" class="runa" data-id="1" alt="HÁLDRA">
-  <img src="../assets/runa2.png" class="runa" data-id="2" alt="FJORDEN">
-  <img src="../assets/runa3.png" class="runa" data-id="3" alt="ÞRAKK">
-  <img src="../assets/runa4.png" class="runa" data-id="4" alt="ÁSGAR">
-  <img src="../assets/runa5.png" class="runa" data-id="5" alt="RÚNVALD">
-  <img src="../assets/runa6.png" class="runa" data-id="6" alt="KARGR">
-  <img src="../assets/runa7.png" class="runa" data-id="7" alt="NORDHIM">
-  <img src="../assets/runa8.png" class="runa" data-id="8" alt="JÖTUNN">
-  <img src="../assets/runa9.png" class="runa" data-id="9" alt="ÓRMR">
-</div>
+  <!-- NIEVE -->
+  <script>
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      s.className = 'snowflake';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.width = s.style.height = Math.random() * 4 + 2 + 'px';
+      s.style.animationDuration = Math.random() * 5 + 5 + 's';
+      s.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(s);
+    }
+  </script>
 
-<div id="overlay" class="hidden">
-  <div id="runa-ampliada">
-    <img id="runa-central" src="" alt="Runa ampliada">
-    <div id="texto"></div>
-    <button id="cerrar">✕</button>
+  <!-- POSTAL -->
+  <div class="card">
+    <div class="card-inner">
+
+      <!-- FRENTE -->
+      <div class="card-face front">
+        <div class="moon"></div>
+        <div class="greeting">Feliz Navidad</div>
+        <div class="tree">
+          <div class="star"></div>
+        </div>
+      </div>
+
+      <!-- ATRÁS -->
+      <div class="card-face back">
+        <div class="message">
+          Querido Kikolas.<br>
+          Todo detrás de un pirata, tiene un por qué, un motivo por el cual decidió empezar una nueva aventura,
+          y un propósito. Es por ello que te sumergirás en el bául de los recuerdos de Tetsugoro. Verás..
+          <br><br><a href="piedra/" target="_blank" class="btn-navidad">Ver Recuerdos de Tetsu</a>
+        </div>
+        <div class="signature">— Con cariño, Tetsugoro 🎄</div>
+      </div>
+
+    </div>
   </div>
-</div>
-
-<div id="overlay-instrucciones">
-  <div id="caja-instrucciones">
-    <button id="cerrar-instrucciones">✕</button>
-    <h1>El bául de los recuerdos de Tetsugoro</h1>
-    <p>
-      Ante ti se alzan las nueve runas que guardan la memoria rota de Tetsugoro.
-    </p>
-    <p><strong>Cómo usar esta piedra:</strong></p>
-    <ul>
-      <li>Haz clic sobre cualquier runa para invocar su recuerdo.</li>
-      <li>La runa se mostrará en el centro, junto a su fragmento de historia.</li>
-      <li>Usa la ✕ para cerrar el recuerdo y volver a la piedra.</li>
-    </ul>
-    <p>
-      Algunas runas son cálidas, otras pesan como una culpa antigua, solo tómate tu tiempo.
-    </p>
-    <button id="btn-empezar">Comenzar</button>
-  </div>
-</div>
-
-<script>
-  const textos = {
-    1: `HÁLDRA — Runa de la Madre\n\nRecuerdo cálido de su voz y sus manos gigantes antes de ser secuestrada a manos de piratas. No solo la secuestraron a ella,
-     sino a otros gigantes más para ser subastados como esclavos. `,
-    2: `FJORDEN — Runa del Hogar\n\nEl fuego, la madera, el olor a resina en Elbaf antes de la tragedia. Aquella noche será inolvidable para Tetsugoro, secuelas, visiones, pesadillas.. `,
-    3: `ÞRAKK — Runa del Secuestro\n\nLa madre gigante de Tetsugoro es arrancada de su hogar por piratas en una noche que marcó su juventud para siempre. 
-    Un recuerdo que aún arde como una herida abierta. `,
-    4: `ÁSGAR — Runa del Juramento\n\nAnte sí mismo, en silencio solemne, Tetsugoro juró no volver a caer en la debilidad. 
-    Prometió proteger a los suyos, su tripulación, con la fuerza que no pudo usar cuando más la necesitaba. `,
-    5: `RÚNVALD — Runa del Padre Caído\n\nSu padre murió intentando rescatar a la madre de Tetsugoro. Sus palabras siguen guiándolo: 
-    “El día que levantes tu brazo por alguien más, que no sea por orgullo: hazlo porque el corazón lo pidió.”\n“La fuerza sin propósito solo pesa.” `,
-    6: `KARGR — Runa de la Culpa\n\nTetsugoro carga con la culpa de no haber protegido a sus padres. Una herida que él cree merecida, la más pesada de todas, la que nunca termina de sanar. `,
-    7: `NORDHIM — Runa del Exilio\n\nCon esperanza ingenua, Tetsugoro esperó en el puerto de Elbaf la llegada de otro barco pirata esclavista, 
-    soñando con rescatar a su madre y volver a vivir junto a ella. `,
-    8: `JÖTUNN — Runa del Gigante\n\nTetsugoro se une a la tripulación Mugetsu-dan, siendo el único gigante entre ellos. 
-    Un nuevo camino, un mar desconocido, y aventuras que lo alejan de su pasado sin borrarlo. `,
-    9: `ÓRMR — Runa Rota\n\nNo es un recuerdo, sino lo que aún no ha sido escrito. La runa del destino: el futuro incierto, el misterio que Tetsugoro forja con cada una de sus decisiones. `
-  };
-
-  const overlay = document.getElementById('overlay');
-  const runaCentral = document.getElementById('runa-central');
-  const textoDiv = document.getElementById('texto');
-  const btnCerrar = document.getElementById('cerrar');
-
-  const overlayInstrucciones = document.getElementById('overlay-instrucciones');
-  const btnCerrarInstrucciones = document.getElementById('cerrar-instrucciones');
-  const btnEmpezar = document.getElementById('btn-empezar');
-
-  // Cerrar instrucciones (✕ y "Comenzar")
-  const cerrarInstrucciones = () => {
-    // Puedes usar clase o estilo directo; como ya tienes .hidden, usamos esa:
-    overlayInstrucciones.classList.add('hidden');
-  };
-
-  btnCerrarInstrucciones.addEventListener('click', cerrarInstrucciones);
-  btnEmpezar.addEventListener('click', cerrarInstrucciones);
-
-  // Click en runa → muestra overlay de runa
-  document.querySelectorAll('.runa').forEach(runa => {
-    runa.addEventListener('click', () => {
-      const id = runa.getAttribute('data-id');
-      const src = runa.getAttribute('src');
-      runaCentral.src = src;
-      textoDiv.textContent = textos[id] || '';
-      overlay.classList.remove('hidden');
-    });
-  });
-
-  // Cerrar runa ampliada
-  btnCerrar.addEventListener('click', () => {
-    overlay.classList.add('hidden');
-    runaCentral.src = '';
-  });
-</script>
 
 </body>
 </html>
