@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Postal Navideña</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --red: #b11226;
+      --green: #0f5132;
+      --gold: #f5c97a;
+      --sky1: #0b132b;
+      --sky2: #1c2541;
+      --snow: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, var(--sky2), var(--sky1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    /* ====== POSTAL ====== */
+    .card {
+      width: 360px;
+      height: 520px;
+      perspective: 1200px;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+    }
+
+    .card:hover .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 20px;
+      backface-visibility: hidden;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0,0,0,.5);
+    }
+
+    /* ====== FRENTE ====== */
+    .front {
+      background: linear-gradient(to bottom, #0f5132, #083b25);
+    }
+
+    .moon {
+      position: absolute;
+      top: 100px;
+      right: 40px;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      /*background: #fff;*/
+      background: radial-gradient(circle at 30% 30%, #fff, #ddd);
+      box-shadow: 0 0 25px rgba(255,255,255,0.6);
+      overflow: hidden;
+    }
+
+    .moon::before, .moon::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.08);
+    }
+
+    .moon::before {
+      width: 10px;
+      height: 10px;
+      top: 18px;
+      left: 22px;
+    }
+
+    .moon::after {
+      width: 6px;
+      height: 6px;
+      top: 38px;
+      left: 40px;
+    }
+
+    .tree {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 90px solid transparent;
+      border-right: 90px solid transparent;
+      border-bottom: 200px solid var(--green);
+    }
+
+  .tree::before, .tree::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 70px solid transparent;
+      border-right: 70px solid transparent;
+      border-bottom: 160px solid #136f43;
+    }
+
+    .tree::before {
+      top: 40px;
+    }
+
+    .tree::after {
+      top: 80px;
+    }
+
+    .star {
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 26px;
+      height: 26px;
+      background: var(--gold);
+      box-shadow: 0 0 20px var(--gold);
+      animation: twinkle 1.5s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      from { transform: translateX(-50%) rotate(45deg) scale(1); }
+      to { transform: translateX(-50%) rotate(45deg) scale(1.3); }
+    }
+
+    .greeting {
+      position: absolute;
+      top: 40px;
+      width: 100%;
+      text-align: center;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(0,0,0,.6);
+    }
+
+    /* ====== ATRÁS ====== */
+    .back {
+      background: linear-gradient(135deg, #b11226, #7a0c1b);
+      transform: rotateY(180deg);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .message {
+      background: rgba(255,255,255,.1);
+      border-radius: 16px;
+      padding: 24px;
+      line-height: 1.6;
+      font-size: 1.05rem;
+      backdrop-filter: blur(4px);
+    }
+
+    .signature {
+      text-align: right;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .btn-navidad {
+      display: inline-block;
+      padding: 8px 30px;
+      background: linear-gradient(135deg, #b30000, #ff4d4d);
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 12px;
+      border: 3px solid #fff;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.4), 0 0 20px rgba(255, 0, 0, 0.4);
+      transition: 0.3s;
+      font-family: 'Cinzel', serif;
+    }
+
+    .btn-navidad:hover {
+      background: linear-gradient(135deg, #ff6666, #ff1a1a);
+      transform: scale(1.05);
+      box-shadow: 0 0 18px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 0, 0, 0.6);
+    }
+
+    .btn-navidad:active {
+      transform: scale(0.97);
+    }
+
+    /* ====== NIEVE ====== */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      background: var(--snow);
+      border-radius: 50%;
+      opacity: .8;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NIEVE -->
+  <script>
+    for (let i = 0; i < 60; i++) {
+      const s = document.createElement('div');
+      s.className = 'snowflake';
+      s.style.left = Math.random() * 100 + 'vw';
+      s.style.width = s.style.height = Math.random() * 4 + 2 + 'px';
+      s.style.animationDuration = Math.random() * 5 + 5 + 's';
+      s.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(s);
+    }
+  </script>
+
+  <!-- POSTAL -->
+  <div class="card">
+    <div class="card-inner">
+
+      <!-- FRENTE -->
+      <div class="card-face front">
+        <div class="moon"></div>
+        <div class="greeting">Feliz Navidad</div>
+        <div class="tree">
+          <div class="star"></div>
+        </div>
+      </div>
+
+      <!-- ATRÁS -->
+      <div class="card-face back">
+        <div class="message">
+          Querido Kikolas.<br>
+          Todo detrás de un pirata, tiene un por qué, un motivo por el cual decidió empezar una nueva aventura,
+          y un propósito. Es por ello que te sumergirás en el bául de los recuerdos de Tetsugoro. Verás..
+          <br><br><a href="piedra/" target="_blank" class="btn-navidad">Ver Recuerdos de Tetsu</a>
+        </div>
+        <div class="signature">— Con cariño, Tetsugoro 🎄</div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
